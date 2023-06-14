@@ -2,7 +2,7 @@ import { FaWindows, FaPlaystation, FaXbox , FaApple, FaLinux, FaAndroid} from "r
 import {MdPhoneIphone} from "react-icons/md";
 import { SiNintendo } from 'react-icons/si';
 import { BsGlobe } from 'react-icons/bs';
-// Above are icons
+// Above are just icons
 import { IconType } from "react-icons/lib/esm/iconBase";
 
 

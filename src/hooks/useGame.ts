@@ -1,5 +1,6 @@
 import axios, { CanceledError } from "axios";
 import { useEffect, useState } from "react";
+import { Genre } from "./useGenre";
 
 export interface Platform{
     id: number;
@@ -20,7 +21,7 @@ interface FetchGamesResponse{
     results: Game[]
 }
 
-const useGame = () => {
+const useGame = (selectedGenre:Genre | null) => {
     const[games, setGames] = useState<Game[]>([]);
     const[error, setError] = useState('');
     const[isLoading, setIsLoading] = useState(false);
@@ -28,7 +29,10 @@ const useGame = () => {
     useEffect(() => {
         const controller = new AbortController();
         setIsLoading(true);
-        axios.get<FetchGamesResponse>('https://api.rawg.io/api/games?key=cb5b4d28d59a4896ba781fff32784a2d', {signal : controller.signal})
+        axios.get<FetchGamesResponse>('https://api.rawg.io/api/games?key=cb5b4d28d59a4896ba781fff32784a2d', {
+        signal: controller.signal,
+        params: { genres: selectedGenre?.id},
+        })
         .then(res => {
             setGames(res.data.results);
             setIsLoading(false);
@@ -40,7 +44,7 @@ const useGame = () => {
         });
 
         return () => controller.abort();
-    }, []);
+    }, [selectedGenre]);
 
     
     return {games, error, isLoading};

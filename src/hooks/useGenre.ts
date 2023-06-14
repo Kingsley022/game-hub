@@ -1,9 +1,10 @@
 import axios, { CanceledError } from "axios";
 import { useEffect, useState } from "react";
 
-interface Genre{
+export interface Genre{
     id: number;
     name: string;
+    image_background: string;
 }
 interface FetchGenreResponse{
     count: number;
@@ -12,7 +13,7 @@ interface FetchGenreResponse{
 const useGenre = () => {
     const[genres, setGenres] = useState<Genre[]>([]);
     const[error, setError] = useState('');
-    const[isLoading, setIsLoading] = useState(false);
+    const[isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -24,7 +25,7 @@ const useGenre = () => {
         .catch( err => {
             if (err instanceof CanceledError) return;
             setError(err.message);
-            setIsLoading(true);
+            setIsLoading(false);
         });
 
         return () => controller.abort();

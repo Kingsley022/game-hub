@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { CanceledError } from "axios";
 import { useEffect, useState } from "react";
 
 export interface Platform{
@@ -33,7 +33,8 @@ const useGame = () => {
             setGames(res.data.results);
             setIsLoading(false);
         })
-        .catch(err =>  {
+        .catch( err =>  {
+            if (err instanceof CanceledError) return;
             setError(err.message);
             setIsLoading(true);
         });

@@ -11,7 +11,7 @@ export interface Game{
     id: number;
     name: string;
     background_image: string;
-    parent_platforms: { platform: Platform}[]; // use this when objects are returning objects
+    parent_platforms: { platform: Platform}[]; //use this when returning nexted objects
     metacritic: number;
 }
 
@@ -22,18 +22,27 @@ interface FetchGamesResponse{
 
 const useGame = () => {
     const[games, setGames] = useState<Game[]>([]);
+    const[error, setError] = useState('');
+    const[isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const controller = new AbortController();
+        setIsLoading(true);
         axios.get<FetchGamesResponse>('https://api.rawg.io/api/games?key=cb5b4d28d59a4896ba781fff32784a2d', {signal : controller.signal})
-        .then(res => setGames(res.data.results))
-        .catch(err =>  console.log(err.message));
+        .then(res => {
+            setGames(res.data.results);
+            setIsLoading(false);
+        })
+        .catch(err =>  {
+            setError(err.message);
+            setIsLoading(true);
+        });
 
         return () => controller.abort();
     }, []);
 
     
-    return {games};
+    return {games, error, isLoading};
 }
  
 export default useGame;

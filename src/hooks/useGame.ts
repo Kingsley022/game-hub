@@ -21,7 +21,7 @@ interface FetchGamesResponse{
     results: Game[]
 }
 
-const useGame = (selectedGenre:Genre | null) => {
+const useGame = (selectedGenre:Genre | null,  selectedPlatform: Platform | null) => {
     const[games, setGames] = useState<Game[]>([]);
     const[error, setError] = useState('');
     const[isLoading, setIsLoading] = useState(false);
@@ -31,7 +31,7 @@ const useGame = (selectedGenre:Genre | null) => {
         setIsLoading(true);
         axios.get<FetchGamesResponse>('https://api.rawg.io/api/games?key=cb5b4d28d59a4896ba781fff32784a2d', {
         signal: controller.signal,
-        params: { genres: selectedGenre?.id},
+        params: { genres: selectedGenre?.id, platforms: selectedPlatform?.id},
         })
         .then(res => {
             setGames(res.data.results);
@@ -44,7 +44,7 @@ const useGame = (selectedGenre:Genre | null) => {
         });
 
         return () => controller.abort();
-    }, [selectedGenre]);
+    }, [selectedGenre,  selectedPlatform]);
 
     
     return {games, error, isLoading};

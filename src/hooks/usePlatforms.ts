@@ -1,11 +1,6 @@
 import axios, { CanceledError } from "axios";
 import { useEffect, useState } from "react";
-
-interface Platform {
-    id: number;
-    name: string;
-    slug: string;
-}
+import { Platform } from "./useGame";
 
 const usePlatform = () => {
 

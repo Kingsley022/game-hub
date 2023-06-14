@@ -12,7 +12,7 @@ function App() {
         </GridItem>
 
         <GridItem area="aside">
-          Aside
+          {/* Aside */}
         </GridItem>
 
         <GridItem area="main">

@@ -9,11 +9,12 @@ interface Props {
     selectedGenre: Genre | null;
     selectedPlatform: Platform | null;
     selectedSortOrder: string;
+    searchText: string;
 }
 
-const GameGrid = ({ selectedGenre,  selectedPlatform, selectedSortOrder}:Props) => {
+const GameGrid = ({ selectedGenre,  selectedPlatform, selectedSortOrder, searchText}:Props) => {
     
-    const {games, error, isLoading} = useGame(selectedGenre,  selectedPlatform, selectedSortOrder);
+    const {games, error, isLoading} = useGame(selectedGenre,  selectedPlatform, selectedSortOrder, searchText);
     const Skeletons = [1,2,3,4,5,6, 7, 8, 9, 10];
 
     return (

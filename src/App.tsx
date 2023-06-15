@@ -13,6 +13,7 @@ function App() {
 
   const[selectedGenre, setSelectedGenre] =useState<Genre | null>(null);
   const[selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null);
+  const[selectedSortOrder, setSelectedSortOrder] = useState('');
 
 
   return (
@@ -32,9 +33,9 @@ function App() {
         <GridItem area="main" padding={8} paddingTop={0}>
           <HStack spacing={3} marginBottom={5}>
             <PlatformSelector onSelectPlatform={(platform) => setSelectedPlatform(platform)}  selectedPlatform={selectedPlatform}/>
-            <SortSelector/>
+            <SortSelector onSelectSortOrder={(sortOrder) => setSelectedSortOrder(sortOrder)} selectedSortOrder={selectedSortOrder}/>
           </HStack>
-          <GameGrid selectedGenre={selectedGenre}  selectedPlatform={ selectedPlatform}/>
+          <GameGrid selectedGenre={selectedGenre}  selectedPlatform={ selectedPlatform} selectedSortOrder={selectedSortOrder}/>
         </GridItem>
 
     </Grid>

@@ -8,6 +8,7 @@ import { Genre } from './hooks/useGenre'
 import { Platform } from './hooks/useGame'
 import PlatformSelector from './components/platformSelector'
 import SortSelector from './components/sortSelector'
+import GameHeader from './components/gameHeader'
 
 function App() {
 
@@ -15,6 +16,13 @@ function App() {
   const[selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null);
   const[selectedSortOrder, setSelectedSortOrder] = useState('');
   const[searchText, setSearchText] = useState('');
+
+  const gameQuery = {
+    selectedGenre,
+    selectedPlatform,
+    selectedSortOrder,
+    searchText
+  }
 
 
   return (
@@ -32,6 +40,7 @@ function App() {
         </Show>
 
         <GridItem area="main" padding={8} paddingTop={0}>
+          <GameHeader gameQuery={gameQuery}/>
           <HStack spacing={3} marginBottom={5}>
             <PlatformSelector onSelectPlatform={(platform) => setSelectedPlatform(platform)}  selectedPlatform={selectedPlatform}/>
             <SortSelector onSelectSortOrder={(sortOrder) => setSelectedSortOrder(sortOrder)} selectedSortOrder={selectedSortOrder}/>

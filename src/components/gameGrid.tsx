@@ -17,23 +17,22 @@ const GameGrid = ({ selectedGenre,  selectedPlatform, selectedSortOrder, searchT
     const {games, error, isLoading} = useGame(selectedGenre,  selectedPlatform, selectedSortOrder, searchText);
     const Skeletons = [1,2,3,4,5,6, 7, 8, 9, 10];
 
+    if(error) return <Text> {error} </Text>
+
     return (
-        <>
-            {error && <Text> {error} </Text>}
-            <SimpleGrid columns={{sm:1, md:2, lg:3, xl:4}} spacing={6} marginTop='8px'>
-                {isLoading && Skeletons.map(skeleton => (
-                    <GameCardContainer key={skeleton}>
-                        <GameCardSkeleton />
-                    </GameCardContainer>
-                ))}
-                {games?.map(game => ( 
-                    <GameCardContainer key={game.id}>
-                        <GameCard game={game}/> 
-                    </GameCardContainer>
-                ))}
-            </SimpleGrid>
+        <SimpleGrid columns={{sm:1, md:2, lg:3, xl:4}} spacing={6} marginTop='8px'>
+            {isLoading && Skeletons.map(skeleton => (
+                <GameCardContainer key={skeleton}>
+                    <GameCardSkeleton />
+                </GameCardContainer>
+            ))}
+            {games?.map(game => ( 
+                <GameCardContainer key={game.id}>
+                    <GameCard game={game}/> 
+                </GameCardContainer>
+            ))}
+        </SimpleGrid>
             
-        </>
     );
 }
  

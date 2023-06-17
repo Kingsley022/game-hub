@@ -1,6 +1,6 @@
-import axios, { CanceledError } from "axios";
-import { useEffect, useState } from "react";
+import axios from "axios";
 import { Genre } from "./useGenre";
+import { useQuery } from '@tanstack/react-query';
 
 export interface Platform{
     id: number;
@@ -17,40 +17,22 @@ export interface Game{
     rating_top: number;
 }
 
-interface FetchGamesResponse{
-    count: number;
-    results: Game[]
-}
 
 const useGame = (selectedGenre:Genre | null,  selectedPlatform: Platform | null, selectedSortOrder: string, searchText:string) => {
-    const[games, setGames] = useState<Game[]>([]);
-    const[error, setError] = useState('');
-    const[isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-        const controller = new AbortController();
-        setIsLoading(true);
-        axios.get<FetchGamesResponse>('https://api.rawg.io/api/games?key=cb5b4d28d59a4896ba781fff32784a2d', {
-        signal: controller.signal,
-        params: { 
-            genres: selectedGenre?.id, 
-            platforms: selectedPlatform?.id, 
-            ordering: selectedSortOrder,
-            search: searchText
-        },
-        })
-        .then(res => {
-            setGames(res.data.results);
-            setIsLoading(false);
-        })
-        .catch( err =>  {
-            if (err instanceof CanceledError) return;
-            setError(err.message);
-            setIsLoading(true);
+        const { data: games, isLoading, error } = useQuery<Game[], Error>(['games', selectedGenre, selectedPlatform, selectedSortOrder, searchText], async () => {
+            const response = await axios.get('https://api.rawg.io/api/games?key=cb5b4d28d59a4896ba781fff32784a2d', {
+                params: {
+                    genres: selectedGenre?.id,
+                    parent_platforms: selectedPlatform?.id,
+                    ordering: selectedSortOrder,
+                    search: searchText
+                }
+            });
+
+            return response.data.results;
         });
-
-        return () => controller.abort();
-    }, [selectedGenre,  selectedPlatform, selectedSortOrder, searchText]);
+        
 
     
     return {games, error, isLoading};

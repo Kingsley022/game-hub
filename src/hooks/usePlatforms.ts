@@ -1,24 +1,14 @@
-import axios, { CanceledError } from "axios";
-import { useEffect, useState } from "react";
+import axios from "axios";
 import { Platform } from "./useGame";
+import { useQuery } from '@tanstack/react-query';
+
 
 const usePlatform = () => {
 
-    const[platforms, setPlatforms] = useState<Platform[]>([]);
-    const[error, setError] = useState('');
-
-    useEffect(() => {
-        const controller = new AbortController();
-        axios.get('https://api.rawg.io/api/platforms/lists/parents?key=cb5b4d28d59a4896ba781fff32784a2d')
-        .then(res => {
-            setPlatforms(res.data.results);
-        })
-        .catch(err => {
-            if(err instanceof CanceledError) return;
-            setError(err.message)
-        });
-        return () => controller.abort();
-    }, []);
+    const{data:platforms, error} = useQuery<Platform[]>(['platforms'], async () => {
+        const response  =  await axios.get('https://api.rawg.io/api/platforms/lists/parents?key=cb5b4d28d59a4896ba781fff32784a2d')
+        return response.data.results
+    });
 
     return {platforms, error};
 }

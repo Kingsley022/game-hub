@@ -17,7 +17,7 @@ const GameGrid = ({ selectedGenre,  selectedPlatform, selectedSortOrder, searchT
     const {games, error, isLoading} = useGame(selectedGenre,  selectedPlatform, selectedSortOrder, searchText);
     const Skeletons = [1,2,3,4,5,6, 7, 8, 9, 10];
 
-    if(error) return <Text> {error} </Text>
+    if(error) return <Text> {error.message}</Text>
 
     return (
         <SimpleGrid columns={{sm:1, md:2, lg:3, xl:4}} spacing={6} marginTop='8px'>

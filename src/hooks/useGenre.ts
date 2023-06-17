@@ -1,36 +1,21 @@
-import axios, { CanceledError } from "axios";
-import { useEffect, useState } from "react";
+import axios from "axios";
+import { useQuery } from '@tanstack/react-query';
 
 export interface Genre{
     id: number;
     name: string;
     image_background: string;
 }
-interface FetchGenreResponse{
-    count: number;
-    results: Genre[];
-}
+// interface FetchGenreResponse{
+//     count: number;
+//     results: Genre[];
+// }
 const useGenre = () => {
-    const[genres, setGenres] = useState<Genre[]>([]);
-    const[error, setError] = useState('');
-    const[isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        const controller = new AbortController();
-        axios.get<FetchGenreResponse>('https://api.rawg.io/api/genres?key=cb5b4d28d59a4896ba781fff32784a2d')
-        .then(res => {
-            setGenres(res.data.results);
-            setIsLoading(false);
-        })
-        .catch( err => {
-            if (err instanceof CanceledError) return;
-            setError(err.message);
-            setIsLoading(false);
-        });
-
-        return () => controller.abort();
-
-    }, []);
+    const{data:genres, isLoading, error} = useQuery<Genre[]>(['genres'], async () => {
+        const response  = await axios.get('https://api.rawg.io/api/genres?key=cb5b4d28d59a4896ba781fff32784a2d');
+        return response.data.results
+    });
 
     return {genres, error, isLoading};
 }

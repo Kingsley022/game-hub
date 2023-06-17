@@ -26,7 +26,7 @@ interface FetchResponse{
 const useGame = (selectedGenre:Genre | null,  selectedPlatform: Platform | null, selectedSortOrder: string, searchText:string) => {
 
         
-        const { data: games, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<FetchResponse, Error>(
+        const { data: games, isLoading, error, fetchNextPage, hasNextPage} = useInfiniteQuery<FetchResponse, Error>(
             ['games', selectedGenre?.id, selectedPlatform?.id, selectedSortOrder, searchText],
             async ({ pageParam = 1 }) => {
               const response = await axios.get('https://api.rawg.io/api/games?key=cb5b4d28d59a4896ba781fff32784a2d', {
@@ -51,7 +51,7 @@ const useGame = (selectedGenre:Genre | null,  selectedPlatform: Platform | null,
         
 
     
-    return {games, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage};
+    return {games, error, isLoading, fetchNextPage, hasNextPage};
 }
  
 export default useGame;
